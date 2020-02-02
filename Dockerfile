@@ -1,5 +1,6 @@
 # Define a builder image
-FROM debian:jessie as builder
+#FROM debian:jessie as builder
+FROM ubuntu
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
@@ -65,7 +66,8 @@ RUN conda remove -y nodejs invoke && \
 COPY . /srv/nbviewer
 
 # Now define the runtime image
-FROM debian:jessie
+#FROM debian:jessie
+FROM ubuntu
 
 COPY --from=builder /opt/conda /opt/conda
 COPY --from=builder /srv/nbviewer /srv/nbviewer

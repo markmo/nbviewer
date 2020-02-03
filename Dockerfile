@@ -1,6 +1,6 @@
 # Define a builder image
 #FROM debian:jessie as builder
-FROM ubuntu
+FROM ubuntu as builder
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8

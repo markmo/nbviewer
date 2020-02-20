@@ -400,6 +400,11 @@ class BaseHandler(web.RequestHandler):
         kw = {}
         kw.update(self.fetch_kwargs)
         kw.update(overrides)
+        token = self.get_argument("token", "")
+        app_log.debug('token: %s', token)
+        if token:
+            kw.update({'token': token})
+
         with self.catch_client_error():
             response = await self.client.fetch(url, **kw)
         return response

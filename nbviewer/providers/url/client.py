@@ -17,6 +17,8 @@ from tornado.httpclient import HTTPRequest, HTTPError
 from tornado.curl_httpclient import CurlAsyncHTTPClient
 from tornado.log import app_log
 
+from urllib.parse import urlparse, parse_qs
+
 from nbviewer.utils import time_block
 
 #-----------------------------------------------------------------------------
@@ -55,7 +57,13 @@ class NBViewerAsyncHTTPClient(object):
         self.client = client or CurlAsyncHTTPClient()
 
     def fetch(self, url, callback=None, params=None, **kwargs):
-        request = HTTPRequest(url, **kwargs)
+        token = kwargs.get('token', '')
+        if token:
+            app_log.debug('Sending Authorization header')
+            kwargs.pop('token', None)
+            request = HTTPRequest(url, headers={'X-CKAN-API-Key': token}, **kwargs)
+        else:
+            request = HTTPRequest(url, **kwargs)
 
         if request.user_agent is None:
             request.user_agent = 'Tornado-Async-Client'
